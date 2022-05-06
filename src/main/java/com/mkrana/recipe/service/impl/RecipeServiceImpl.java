@@ -2,6 +2,7 @@ package com.mkrana.recipe.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -33,6 +34,11 @@ public class RecipeServiceImpl implements RecipeService {
 		randomnote.setRecipeNotes("Recipe Note");
 		freshBakedCookies.setNote(randomnote);
 		return freshBakedCookies;
+	}
+
+	public Recipe findRecipeById(Long id) {
+		Optional<Recipe> recipe = recipeRepository.findById(id);
+		return recipe.orElse(null);
 	}
 
 }

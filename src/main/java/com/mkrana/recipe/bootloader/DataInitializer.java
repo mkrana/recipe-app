@@ -39,10 +39,11 @@ public class DataInitializer implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		populateRecipe();
+		populateBananaBreadRecipe();
+		prepareBakedOatmealRecipe();
 	}
 
-	private void populateRecipe() {
+	private void populateBananaBreadRecipe() {
 		log.info("Invoked populateRecipe()");
 
 		Optional<UnitOfMeasure> large = unitOfMeasureRepository.findByUom("Large");
@@ -64,6 +65,8 @@ public class DataInitializer implements CommandLineRunner {
 		breadRecipe.setPrepTime(15);
 		breadRecipe.setServings(12);
 		breadRecipe.setDescription("Chocolate Banana Bread");
+		breadRecipe.setSource("SimplyRecipes");
+		breadRecipe.setUrl("https://www.simplyrecipes.com/recipes/chocolate_banana_bread");
 		breadRecipe.setNote(new Notes(
 				"Use very ripe or over-ripe bananas. The peels should be at least half browned, and the bananas inside squishy and browning.\n"
 						+ "Do not use Dutch processed cocoa for this recipe, only natural unsweetened.\n" + "\n"
@@ -93,6 +96,51 @@ public class DataInitializer implements CommandLineRunner {
 		breadRecipe.addIngredients(new Ingredient("Salt", new BigDecimal(1), teaspoon.get()));
 		breadRecipe.addIngredients(new Ingredient("Egg Beaten", new BigDecimal(1), large.get()));
 		recipeRepository.save(breadRecipe);
+
+	}
+
+	private void prepareBakedOatmealRecipe() {
+
+		Optional<UnitOfMeasure> large = unitOfMeasureRepository.findByUom("Large");
+		Optional<UnitOfMeasure> cup = unitOfMeasureRepository.findByUom("Cup");
+		Optional<UnitOfMeasure> teaspoon = unitOfMeasureRepository.findByUom("Teaspoon");
+
+		Optional<Category> easyBaking = categoryRepository.findByDescription("Easy Baking");
+		Optional<Category> breakfast = categoryRepository.findByDescription("Breakfast");
+
+		Set<Category> categories = new HashSet<>();
+		categories.add(easyBaking.get());
+		categories.add(breakfast.get());
+
+		Recipe bakedOatmeal = new Recipe();
+		bakedOatmeal.setPrepTime(10);
+		bakedOatmeal.setCookTime(45);
+		bakedOatmeal.setDescription("Baked Oatmeal with Mixed Berries");
+		bakedOatmeal.setServings(6);
+		bakedOatmeal.setDirections("Preheat your oven and prepare the baking dish:\n"
+				+ "Preheat your oven to 375°F. Grease with butter or lined a 9x9 baking dish with parchment.\n" + "\n"
+				+ "A square white ceramic baking dish to make Overhead view of a baking pan with Baked Berry Oatmeal.\n"
+				+ "Combine ingredients in a large mixing bowl:\n"
+				+ "In a large mixing bowl, add oats, milk, eggs, melted butter, honey, yogurt, vanilla, and salt. Stir with a fork or whisk to combine thoroughly.\n"
+				+ "\n" + "Oatmeal mixed in a glass bowl to make Mixed Berry Baked Oatmeal.\n"
+				+ "Fold the berries into the mixture and move to casserole dish:\n"
+				+ "Fold 3/4 cup each of blueberries and raspberries into the mixture. Pour mixture into prepared casserole dish. Sprinkle all remaining berries over top.\n"
+				+ "\n" + "Berries mixed into oatmeal in a glass bowl to make Mixed Berry Baked Oatmeal.\n"
+				+ "Mixed Berry Baked Oatmeal in a ceramic baking dish and ready to be baked.\n" + "Bake casserole:\n"
+				+ "Bake the oatmeal casserole for 45 minutes, or until the casserole is shiny on top and firm to the touch.");
+		bakedOatmeal.setDifficulty(Difficulty.EASY);
+		bakedOatmeal.setCategories(categories);
+		bakedOatmeal.setSource("SimplyRecipes");
+		bakedOatmeal.setUrl("https://www.simplyrecipes.com/baked-oatmeal-with-mixed-berries-recipe-5185886");
+		Notes note = new Notes();
+		note.setRecipeNotes(
+				"This straightforward recipe can be made without any strong culinary skills, and kids can easily help out in the process. Here are some tips to keep in mind when preparing a baked oatmeal casserole.\n"
+						+ "\n" + "\n"
+						+ "Baked oatmeal has a fairly firm texture, but it should never be dry. Conversely, it should turn out similar to a thick bread pudding. Think creamy and custardy, but firm enough to lift out of the pan with your hands if desired. Just like bread pudding, it should be removed from the oven when barely set, as it will set further while it cools.\n"
+						+ "\n" + "\n"
+						+ "To not offset the liquid ratio of this dish, fresh berries are the ideal choice. If you need to use frozen berries, be sure to thaw your fruit completely in advance and drain them well. Fold the frozen berries in with the other ingredients gently to make sure they don’t break down too much before baking.");
+		bakedOatmeal.setNote(note);
+		recipeRepository.save(bakedOatmeal);
 
 	}
 

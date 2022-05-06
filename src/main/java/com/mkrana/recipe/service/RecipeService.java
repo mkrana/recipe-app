@@ -8,4 +8,6 @@ public interface RecipeService {
 
 	public List<Recipe> getAllRecipes();
 
+	public Recipe findRecipeById(Long id);
+
 }

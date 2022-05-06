@@ -1,11 +1,15 @@
 package com.mkrana.recipe.service.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -55,6 +59,18 @@ class RecipeServiceImplTest {
 		verify(recipe).setNote(noteArgument.capture());
 		Notes note = noteArgument.getValue();
 		assertEquals("Recipe Note", note.getRecipeNotes());
+	}
+
+	@Test
+	void getRecipeByIdTest() {
+		Recipe recipe = new Recipe();
+		recipe.setId(1L);
+		when(recipeRepository.findById(anyLong())).thenReturn(Optional.of(recipe));
+		Recipe recipeReturned = recipeService.findRecipeById(1L);
+		assertNotNull(recipeReturned);
+		verify(recipeRepository, times(1)).findById(anyLong());
+		verify(recipeRepository, never()).findAll();
+
 	}
 
 }
