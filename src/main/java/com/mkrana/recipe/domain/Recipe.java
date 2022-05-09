@@ -47,23 +47,27 @@ public class Recipe {
 	private Notes note;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe")
-	private Set<Ingredient> ingredients = new HashSet<Ingredient>();
+	private Set<Ingredient> ingredients = new HashSet<>();
 
 	@Enumerated(value = EnumType.STRING)
 	private Difficulty difficulty;
 
 	@ManyToMany
 	@JoinTable(name = "recipe_category_mapping", joinColumns = @JoinColumn(referencedColumnName = "id", name = "recipe_id"), inverseJoinColumns = @JoinColumn(referencedColumnName = "id", name = "category_id"))
-	private Set<Category> categories;
+	private Set<Category> categories =  new HashSet<>();
 
 	public void setNote(Notes note) {
-		this.note = note;
-		note.setRecipe(this);
+		if (note != null) {
+			this.note = note;
+			note.setRecipe(this);
+		}
 	}
 
 	public void addIngredients(Ingredient ingredient) {
-		ingredients.add(ingredient);
-		ingredient.setRecipe(this);
+		if (ingredient != null) {
+			ingredients.add(ingredient);
+			ingredient.setRecipe(this);
+		}
 	}
 
 }

@@ -19,6 +19,8 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import com.mkrana.recipe.converter.RecipeCommandToRecipe;
+import com.mkrana.recipe.converter.RecipeToRecipeCommand;
 import com.mkrana.recipe.domain.Notes;
 import com.mkrana.recipe.domain.Recipe;
 import com.mkrana.recipe.repositories.RecipeRepository;
@@ -31,6 +33,12 @@ class RecipeServiceImplTest {
 	RecipeRepository recipeRepository;
 
 	@Mock
+	RecipeCommandToRecipe recipeCommandToRecipe;
+
+	@Mock
+	RecipeToRecipeCommand recipeToRecipeCommand;
+
+	@Mock
 	Recipe recipe;
 
 	@Captor
@@ -39,7 +47,7 @@ class RecipeServiceImplTest {
 	@BeforeEach
 	void setUp() throws Exception {
 		MockitoAnnotations.openMocks(this);
-		recipeService = new RecipeServiceImpl(recipeRepository);
+		recipeService = new RecipeServiceImpl(recipeRepository, recipeCommandToRecipe, recipeToRecipeCommand);
 	}
 
 	@Test
