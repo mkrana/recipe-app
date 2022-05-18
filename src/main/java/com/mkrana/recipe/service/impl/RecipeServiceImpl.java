@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.mkrana.recipe.command.RecipeCommand;
 import com.mkrana.recipe.converter.RecipeCommandToRecipe;
@@ -49,6 +50,7 @@ public class RecipeServiceImpl implements RecipeService {
 		return freshBakedCookies;
 	}
 
+	@Transactional
 	public Recipe findRecipeById(Long id) {
 		Optional<Recipe> recipe = recipeRepository.findById(id);
 		return recipe.orElse(null);
@@ -61,6 +63,23 @@ public class RecipeServiceImpl implements RecipeService {
 		Recipe savedRecipe = recipeRepository.save(recipe);
 		log.info("Recipe object saved");
 		return recipeToRecipeCommand.convert(savedRecipe);
+	}
+
+	@Override
+	@Transactional
+	public RecipeCommand findRecipeCommandById(Long id) {
+		Optional<Recipe> savedRecipe = recipeRepository.findById(id);
+		RecipeCommand savedRecipeCommand;
+		if (savedRecipe.isPresent())
+			savedRecipeCommand = recipeToRecipeCommand.convert(savedRecipe.get());
+		else
+			throw new RuntimeException("No Recipe Found");
+
+		return savedRecipeCommand;
+	}
+
+	public void deleteRecipeById(Long id) {
+		recipeRepository.deleteById(id);
 	}
 
 }

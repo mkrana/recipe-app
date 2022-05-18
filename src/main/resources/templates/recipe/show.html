@@ -10,7 +10,7 @@
 	<div class="container-fluid">
 		<div class="col-md-6">
 			<div class="card">
-				<div class="card-header" th:text="${recipe.description}">Recipe Description</div>
+				<h3 class="card-header" th:text="${recipe.description}">Recipe Description</h3>
 				<div class="card-body">
 					<div class="card-text">
 						<div class="row">
@@ -70,14 +70,19 @@
 			</div>
 
 			<div class="card">
-				<div class="card-header">Ingredients</div>
+				<div class="card-header">
+					<p class="float-start">Ingredients</p>
+					<a th:href="@{'/recipe/'+${recipe.id}+'/ingredients'}" class=" float-end btn btn-primary">View</a>
+				</div>
 				<div class="card-body">
 					<div class="card-text">
 						<ul th:each="ingredient: ${recipe.ingredients}">
-							<li th:text="${ingredient.amount} +' '+ ${ingredient.unitOfMeasure.uom} +' '+ ${ingredient.description}">
+							<li
+								th:text="${ingredient.amount} +' '+ ${ingredient.unitOfMeasure.uom} +' '+ ${ingredient.description}">
 								Ingredient One</li>
 						</ul>
 					</div>
+
 				</div>
 			</div>
 
