@@ -65,31 +65,30 @@ class RecipeToRecipeCommandTest {
 		recipe.setImage(IMAGE);
 		recipe.setSource(SOURCE);
 		recipe.setUrl(URL);
-		
+
 		Notes note = new Notes();
 		note.setId(ID_1);
 		note.setRecipeNotes(DESCRIPTION);
 		recipe.setNote(note);
-		
+
 		Ingredient ingredient = new Ingredient();
 		ingredient.setAmount(AMOUNT);
 		ingredient.setId(ID_1);
 		ingredient.setDescription(DESCRIPTION);
 		ingredient.setUnitOfMeasure(new UnitOfMeasure());
 		recipe.getIngredients().add(ingredient);
-		
+
 		Ingredient ingredient2 = new Ingredient();
 		ingredient2.setAmount(AMOUNT);
 		ingredient2.setId(ID_1);
 		ingredient2.setDescription(DESCRIPTION);
 		ingredient2.setUnitOfMeasure(new UnitOfMeasure());
 		recipe.getIngredients().add(ingredient2);
-		
-		
+
 		RecipeCommand recipeCommand = converter.convert(recipe);
-		
-		//All Test
-		
+
+		// All Test
+
 		assertEquals(recipe.getId(), recipeCommand.getId());
 		assertEquals(recipe.getDescription(), recipeCommand.getDescription());
 		assertEquals(recipe.getCookTime(), recipeCommand.getCookTime());
@@ -98,10 +97,11 @@ class RecipeToRecipeCommandTest {
 		assertEquals(recipe.getSource(), recipeCommand.getSource());
 		assertEquals(recipe.getImage(), recipeCommand.getImage());
 		assertEquals(recipe.getDirections(), recipeCommand.getDirections());
+		assertEquals(recipe.getDifficulty(), recipeCommand.getDifficulty());
 		assertEquals(recipe.getServings(), recipeCommand.getServings());
 		assertEquals(recipe.getIngredients().size(), recipeCommand.getIngredients().size());
 		assertEquals(recipe.getCategories().size(), recipeCommand.getCategories().size());
-		
+
 	}
 
 }

@@ -46,12 +46,12 @@
 						</div>
 					</div>
 					<div class="row form-group">
-						<div class="col-3">
-							<label for="difficulty" class="form-label">Difficulty:</label>
-							<select name="difficulty" class="form-control" id="difficulty">
-								<option value="EASY" >Easy</option>
-								<option value="MEDIUM">Medium</option>
-								<option value="DIFFICULT">Difficult</option>
+						<div class="col-3 form-group">
+							<label for="difficultyDropdown" class="form">Difficulty:</label>
+							<select name="difficultyDropdown" class="form-control" th:field="*{difficulty}">
+								<option th:each="difficultyValue:${T(com.mkrana.recipe.domain.Difficulty).values()}"
+								th:text="${difficultyValue.name()}"
+								th:value="${difficultyValue.name()}">Option 1</option>
 							</select>
 						</div>
 					</div>

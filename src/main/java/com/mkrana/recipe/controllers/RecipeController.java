@@ -17,6 +17,8 @@ import com.mkrana.recipe.service.RecipeService;
 public class RecipeController {
 
 	RecipeService recipeService;
+	
+	private static final String RECIPE = "recipe";
 
 	public RecipeController(RecipeService recipeService) {
 		super();
@@ -26,14 +28,14 @@ public class RecipeController {
 	@RequestMapping("/{id}/show")
 	@GetMapping
 	public String getRecipeById(@PathVariable String id, Model model) {
-		model.addAttribute("recipe", recipeService.findRecipeById(Long.valueOf(id)));
+		model.addAttribute(RECIPE, recipeService.findRecipeById(Long.valueOf(id)));
 		return "recipe/show";
 	}
 
 	@GetMapping
 	@RequestMapping("/new")
 	public String newRecipe(Model model) {
-		model.addAttribute("recipe", new Recipe());
+		model.addAttribute(RECIPE, new Recipe());
 		return "recipe/newrecipe";
 	}
 
@@ -48,7 +50,7 @@ public class RecipeController {
 	@RequestMapping("/{id}/update")
 	public String updateRecipe(@PathVariable String id, Model model) {
 		RecipeCommand savedRecipe = recipeService.findRecipeCommandById(Long.valueOf(id));
-		model.addAttribute("recipe", savedRecipe);
+		model.addAttribute(RECIPE, savedRecipe);
 		return "recipe/newrecipe";
 
 	}
