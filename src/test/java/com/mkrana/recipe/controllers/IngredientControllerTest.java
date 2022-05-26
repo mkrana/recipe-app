@@ -46,7 +46,7 @@ class IngredientControllerTest {
 	void setUp() throws Exception {
 		ingredientMvc = MockMvcBuilders
 				.standaloneSetup(new IngredientController(recipeService, ingredientService, unitOfMeasureService))
-				.build();
+				.setControllerAdvice(GlobalExceptionHandler.class).build();
 	}
 
 	@Test
@@ -100,9 +100,14 @@ class IngredientControllerTest {
 
 	@Test
 	void testDeleteIngredient() throws Exception {
-		ingredientMvc.perform(get("/recipe/1/ingredients/2/delete"))
-		.andExpect(status().is3xxRedirection())
-		.andExpect(view().name("redirect:/recipe/1/ingredients"));
+		ingredientMvc.perform(get("/recipe/1/ingredients/2/delete")).andExpect(status().is3xxRedirection())
+				.andExpect(view().name("redirect:/recipe/1/ingredients"));
 		verify(ingredientService).deleteIngredient(anyLong(), anyLong());
+	}
+
+	@Test
+	void testIncorrectURLParameter() throws Exception {
+		ingredientMvc.perform(get("/recipe/a/ingredients/b/delete")).andExpect(status().isBadRequest())
+				.andExpect(view().name("400badrequest"));
 	}
 }

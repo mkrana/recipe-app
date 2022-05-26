@@ -13,12 +13,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.ui.Model;
@@ -26,8 +27,10 @@ import org.springframework.ui.Model;
 import com.mkrana.recipe.domain.Recipe;
 import com.mkrana.recipe.service.RecipeService;
 
+@ExtendWith(MockitoExtension.class)
 class IndexControllerTest {
 
+	@InjectMocks
 	IndexController indexController;
 
 	@Mock
@@ -38,12 +41,6 @@ class IndexControllerTest {
 
 	@Captor
 	ArgumentCaptor<List<Recipe>> argumentRecipeCaptor;
-
-	@BeforeEach
-	void setUp() throws Exception {
-		MockitoAnnotations.openMocks(this);
-		indexController = new IndexController(recipeService);
-	}
 
 	@Test
 	void testGetIndexPage() {

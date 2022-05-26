@@ -10,17 +10,28 @@
 	<div class="container-fluid">
 		<div class="col-md-6">
 			<div class="card">
-				<h3 class="card-header" th:text="${recipe.description}">Recipe Description</h3>
+				<div class="card-header">
+					<h3 class="float-start" th:text="${recipe.description}">Recipe Description</h3>
+					<a class="btn btn-primary float-end" th:href="@{'/recipe/'+${recipe.id}+'/imageform'}">Image
+						Upload</a>
+				</div>
 				<div class="card-body">
 					<div class="card-text">
+						<div class="row">
+							<div class="col-3">
+							</div>
+						</div>
 						<div class="row">
 							<div class="col-md-3">
 								<h5>Categories:</h5>
 							</div>
-							<div class="col-md-9">
+							<div class="col-md-3">
 								<ul th:each="category:${recipe.categories}">
 									<li th:text=${category.description}>cat one</li>
 								</ul>
+							</div>
+							<div class="col-md-5">
+								<img th:src="@{'/recipe/'+${recipe.id}+'/renderimage'}" alt="" class="img-fluid">
 							</div>
 						</div>
 						<div class="row">

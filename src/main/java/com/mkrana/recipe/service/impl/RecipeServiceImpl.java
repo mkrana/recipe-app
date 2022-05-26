@@ -13,6 +13,7 @@ import com.mkrana.recipe.converter.RecipeToRecipeCommand;
 import com.mkrana.recipe.domain.Difficulty;
 import com.mkrana.recipe.domain.Notes;
 import com.mkrana.recipe.domain.Recipe;
+import com.mkrana.recipe.exceptions.NotFoundException;
 import com.mkrana.recipe.repositories.RecipeRepository;
 import com.mkrana.recipe.service.RecipeService;
 
@@ -53,7 +54,10 @@ public class RecipeServiceImpl implements RecipeService {
 	@Transactional
 	public Recipe findRecipeById(Long id) {
 		Optional<Recipe> recipe = recipeRepository.findById(id);
-		return recipe.orElse(null);
+		if (!recipe.isPresent()) {
+			throw new NotFoundException("No Such Recipe Exists. For ID Value: " + id.toString());
+		}
+		return recipe.get();
 	}
 
 	@Override
@@ -73,7 +77,7 @@ public class RecipeServiceImpl implements RecipeService {
 		if (savedRecipe.isPresent())
 			savedRecipeCommand = recipeToRecipeCommand.convert(savedRecipe.get());
 		else
-			throw new RuntimeException("No Recipe Found");
+			throw new NotFoundException("No Recipe Found");
 
 		return savedRecipeCommand;
 	}

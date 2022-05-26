@@ -2,6 +2,7 @@ package com.mkrana.recipe.service.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -23,6 +24,7 @@ import com.mkrana.recipe.converter.RecipeCommandToRecipe;
 import com.mkrana.recipe.converter.RecipeToRecipeCommand;
 import com.mkrana.recipe.domain.Notes;
 import com.mkrana.recipe.domain.Recipe;
+import com.mkrana.recipe.exceptions.NotFoundException;
 import com.mkrana.recipe.repositories.RecipeRepository;
 
 class RecipeServiceImplTest {
@@ -88,4 +90,9 @@ class RecipeServiceImplTest {
 
 	}
 
+	@Test
+	void getRecipeByIdNotFound() throws Exception {
+		assertThrows(NotFoundException.class, () -> recipeService.findRecipeById(3L));
+	}
+	
 }

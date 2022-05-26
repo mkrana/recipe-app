@@ -22,6 +22,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.mkrana.recipe.command.RecipeCommand;
 import com.mkrana.recipe.domain.Recipe;
+import com.mkrana.recipe.exceptions.NotFoundException;
 import com.mkrana.recipe.service.RecipeService;
 
 @ExtendWith(MockitoExtension.class)
@@ -37,7 +38,9 @@ class RecipeControllerTest {
 
 	@BeforeEach
 	void setUp() throws Exception {
-		controller = MockMvcBuilders.standaloneSetup(recipeController).build();
+		controller = MockMvcBuilders.standaloneSetup(recipeController)
+				.setControllerAdvice(GlobalExceptionHandler.class)
+				.build();
 	}
 
 	@Test
@@ -77,10 +80,22 @@ class RecipeControllerTest {
 	}
 
 	@Test
-	void testDeletRecipe() throws Exception {
+	void testDeleteRecipe() throws Exception {
 		controller.perform(get("/recipe/1/delete")).andExpect(view().name("redirect:/"))
 				.andExpect(status().is3xxRedirection());
 		verify(recipeService).deleteRecipeById(anyLong());
 	}
 
+	@Test
+	void recipeNotFound() throws Exception {
+		when(recipeService.findRecipeById(anyLong())).thenThrow(NotFoundException.class);
+		controller.perform(get("/recipe/1/show")).andExpect(status().isNotFound())
+				.andExpect(view().name("404notfound"));
+	}
+
+	@Test
+	void incorrectUrlParameter() throws Exception {
+		controller.perform(get("/recipe/s/show")).andExpect(status().isBadRequest())
+				.andExpect(view().name("400badrequest"));
+	}
 }
