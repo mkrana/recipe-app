@@ -38,8 +38,7 @@ class RecipeControllerTest {
 
 	@BeforeEach
 	void setUp() throws Exception {
-		controller = MockMvcBuilders.standaloneSetup(recipeController)
-				.setControllerAdvice(GlobalExceptionHandler.class)
+		controller = MockMvcBuilders.standaloneSetup(recipeController).setControllerAdvice(GlobalExceptionHandler.class)
 				.build();
 	}
 
@@ -64,9 +63,11 @@ class RecipeControllerTest {
 		RecipeCommand recipeCommand = new RecipeCommand();
 		recipeCommand.setId(2L);
 		when(recipeService.saveRecipe(any())).thenReturn(recipeCommand);
+		// All the fields need to be specified to satisfy constraints of RecipeCommand
 		controller
 				.perform(post("/recipe/save").accept(MediaType.APPLICATION_FORM_URLENCODED).param("id", "2")
-						.param("description", "Bakedgoods"))
+						.param("directions", "sa").param("description", "Bakedgoods")
+						.param("prepTime", "4").param("cookTime", "5").param("servings", "43"))
 				.andExpect(status().is3xxRedirection()).andExpect(view().name("redirect:/recipe/2/show"));
 
 	}
@@ -98,4 +99,14 @@ class RecipeControllerTest {
 		controller.perform(get("/recipe/s/show")).andExpect(status().isBadRequest())
 				.andExpect(view().name("400badrequest"));
 	}
+
+	@Test
+	void testNewValidationFail() throws Exception {
+		RecipeCommand recipeCommand = new RecipeCommand();
+		recipeCommand.setId(2L);
+		// when(recipeService.saveRecipe(any())).thenReturn(recipeCommand);
+		controller.perform(post("/recipe/save").contentType(MediaType.APPLICATION_FORM_URLENCODED).param("id", "2"))
+				.andExpect(view().name("recipe/newrecipe")).andExpect(status().isOk());
+	}
+
 }

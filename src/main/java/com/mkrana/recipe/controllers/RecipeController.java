@@ -1,9 +1,12 @@
 
 package com.mkrana.recipe.controllers;
 
+import javax.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -17,10 +20,15 @@ import com.mkrana.recipe.domain.Recipe;
 import com.mkrana.recipe.exceptions.NotFoundException;
 import com.mkrana.recipe.service.RecipeService;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Controller
+@Slf4j
 public class RecipeController {
 
-	RecipeService recipeService;
+	private static final String RECIPEFORM = "recipe/newrecipe";
+
+	private final RecipeService recipeService;
 
 	private static final String RECIPE = "recipe";
 
@@ -38,11 +46,16 @@ public class RecipeController {
 	@GetMapping("/recipe/new")
 	public String newRecipe(Model model) {
 		model.addAttribute(RECIPE, new Recipe());
-		return "recipe/newrecipe";
+		return RECIPEFORM;
 	}
 
 	@PostMapping("/recipe/save")
-	public String saveOrUpdateRecipe(@ModelAttribute RecipeCommand recipeCommand) {
+	public String saveOrUpdateRecipe(@Valid @ModelAttribute("recipe") RecipeCommand recipeCommand,
+			BindingResult result) {
+		if (result.hasErrors()) {
+			result.getAllErrors().forEach(error -> log.error(error.toString()));
+			return RECIPEFORM;
+		}
 		RecipeCommand savedEntity = recipeService.saveRecipe(recipeCommand);
 		return "redirect:/recipe/" + savedEntity.getId() + "/show";
 	}
@@ -51,7 +64,7 @@ public class RecipeController {
 	public String updateRecipe(@PathVariable String id, Model model) {
 		RecipeCommand savedRecipe = recipeService.findRecipeCommandById(Long.valueOf(id));
 		model.addAttribute(RECIPE, savedRecipe);
-		return "recipe/newrecipe";
+		return RECIPEFORM;
 
 	}
 
