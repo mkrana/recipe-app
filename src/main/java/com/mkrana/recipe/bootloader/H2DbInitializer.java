@@ -5,7 +5,9 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
-import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import com.mkrana.recipe.domain.Category;
@@ -22,7 +24,8 @@ import lombok.extern.slf4j.Slf4j;
 
 @Component
 @Slf4j
-public class DataInitializer implements CommandLineRunner {
+@Profile("default")
+public class H2DbInitializer implements ApplicationRunner {
 
 	private final CategoryRepository categoryRepository;
 
@@ -30,17 +33,11 @@ public class DataInitializer implements CommandLineRunner {
 
 	private final RecipeRepository recipeRepository;
 
-	public DataInitializer(CategoryRepository categoryRepository, UnitOfMeasureRepository unitOfMeasureRepository,
+	public H2DbInitializer(CategoryRepository categoryRepository, UnitOfMeasureRepository unitOfMeasureRepository,
 			RecipeRepository recipeRepository) {
 		this.categoryRepository = categoryRepository;
 		this.unitOfMeasureRepository = unitOfMeasureRepository;
 		this.recipeRepository = recipeRepository;
-	}
-
-	@Override
-	public void run(String... args) throws Exception {
-		populateBananaBreadRecipe();
-		prepareBakedOatmealRecipe();
 	}
 
 	private void populateBananaBreadRecipe() {
@@ -142,6 +139,12 @@ public class DataInitializer implements CommandLineRunner {
 		bakedOatmeal.setNote(note);
 		recipeRepository.save(bakedOatmeal);
 
+	}
+
+	@Override
+	public void run(ApplicationArguments args) throws Exception {
+		populateBananaBreadRecipe();
+		prepareBakedOatmealRecipe();
 	}
 
 }
